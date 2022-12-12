@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-D1WLGVDYLR"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-D1WLGVDYLR');
+    </script>
+
+    <meta charset="utf-8">
+    <meta name="description" content="Зчитувач цифрових документів про вакцинацію">
+
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Digital COVID Certificate Decoder">
+    <meta name="apple-mobile-web-app-title" content="DCC Decoder">
+    <meta name="theme-color" content="#00D1B2">
+    <meta name="msapplication-navbutton-color" content="#00D1B2">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="msapplication-starturl" content="/">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192x192.png" >
+    <link rel="shortcut icon" href="favicon.png" type="image/x-png">
+    <link rel="icon" href="favicon.png" type="image/x-png">
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-switch@2.0.0/dist/css/bulma-switch.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/fontawesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/solid.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/brands.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+          rel="stylesheet">
+    <script src="bundle.js" defer></script>
+    <script src="//mozilla.github.io/pdf.js/build/pdf.js"></script>
+
+    <title>Зчитувач цифрових документів про вакцинацію </title>
+    <style>
+        body {
+            background: white
+        }
+
+        section {
+            background: black;
+            color: white;
+            border-radius: 1em;
+            padding: 1em;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-right: -50%;
+            transform: translate(-50%, -50%)
+        }
+    </style>
+</head>
+
+<body id="drop-area">
+<div class="main">
+    <div class="section">
+        <div class="container title is-unselectable">
+            <h1 class="title">Зчитувач цифрових документів про вакцинацію</h1>
+        </div>
+        <div class="container pt-5">
+            <div class="columns is-variable is-6">
+                <div class="column is-unselectable">
+                    <span class="label is-size-4"></span>
+                    <div class="box mb-6">
+                        <div class="container">
+                            <div class="block has-text-centered is-flex is-justify-content-center">
+                                <div id="drag-drop-text">
+                                    <div class="is-size-1">
+                                        <i class="fas fa-qrcode"></i>
+                                    </div>
+                                    <div>
+                                        <p class="is-hidden-touch">
+                                            Перетягніть QR-код у це поле
+                                        </p>
+                                        <p class="is-hidden-desktop">
+                                            Сертифікат не завантажено
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="qr-scanner" hidden>
+                                <video id="camera-stream"></video>
+                            </div>
+                            <div class="block canvas-wrapper is-hidden">
+                                <p id="is-authentic-text">Документ завантажено</p>
+                                <canvas id="qr-canvas" height=300 width=300>
+                                    Цей браузер не підтримує HTML5 Canvas.
+                                    Ця програма може не працювати належним чином без Canvas API.
+                                    Перейдіть на підтримуваний браузер
+                                </canvas>
+                            </div>
+
+                            <div class="content has-text-centered mt-3">
+                                <!--<div class="container mb-2">-->
+                                <!--<div class="button is-info is-medium" id="start-scan">-->
+                                <!--<span class="icon"><i class="fas fa-qrcode"></i></span>-->
+                                <!--<span>Відскануйте QR-код</span>-->
+                                <!--</div>-->
+                                <!--</div>-->
+
+                                <div class="content is-unselectable">
+                                    <div class="container is-flex is-justify-content-center is-align-items-center">
+                                        <!--<div>-->
+                                        <!--<span>або</span>-->
+                                        <!--<span class="mr-2 ml-2"> </span>-->
+                                        <!--</div>-->
+                                        <span>
+                                                <div class="file">
+                                                    <label class="file-label">
+                                                        <input class="file-input" type="file" name="reader"
+                                                               id="file-selector"
+                                                               accept=".jpg, .jpeg, .png, .bmp, .webp, .tiff,.pdf">
+                                                        <span class="button file-cta is-primary">
+                                                            <span class="file-icon">
+                                                                <i class="fas fa-upload"></i>
+                                                            </span>
+                                                            <span id="show-btn-text" class="file-label">
+                                                                Виберіть файл
+                                                            </span>
+                                                            <span id="hide-btn-text" hidden>
+                                                               Оберіть наступний файл
+                                                            </span>
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            </span>
+                                    </div>
+                                    <div id="format-text" >
+                                            <span>
+                                              Підтримується розпізнавання документів у форматі EU DCC (COVID-сертифікатів).
+                                                Можуть бути прочитані файли, які містять документ в формі QR-коду.
+                                                Необхідно завантажувати файл у одному з форматів: jpg, jpeg, png, pdf, розміром до 5 Мб.
+                                                В багатосторінковому файлі QR-код має бути на першій сторінці.
+                                            </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container block mb-6">
+<!--                        <span class="label is-size-4">Деталі</span>-->
+                        <div class="container">
+                            <div class="box">
+                                <div class="container-fluid">
+                                    <div class="columns is-mobile is-vcentered">
+                                        <div class="column">
+                                                <span class="has-text-weight-semibold pr-3">
+                                                    <label for="dgcHumanReadableToggle" class="mr-2">Технічна
+                                                        інформація</label>
+                                                </span>
+                                        </div>
+                                        <div class="column is-narrow has-text-right">
+                                                <span class="field">
+                                                    <input id="dgcHumanReadableToggle" type="checkbox"
+                                                           class="switch is-rounded" checked>
+                                                    <label for="dgcHumanReadableToggle"></label>
+                                                </span>
+                                        </div>
+                                    </div>
+                                    <div class="content">
+                                        <p>Якщо вимкнути це налаштування, сертифікат відображатиметься у форматі
+                                            необробленого тексту.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="box">
+                                <div class="container-fluid">
+                                    <div class="columns is-mobile is-vcentered">
+                                        <div class="column">
+                                                <span class="has-text-weight-semibold pr-3">
+                                                    <label for="displaySignatureDetailsToggle" class="mr-2">Показати
+                                                        деталі підпису</label>
+                                                </span>
+                                        </div>
+                                        <div class="column is-narrow has-text-right">
+                                                <span class="field">
+                                                    <input id="displaySignatureDetailsToggle" type="checkbox"
+                                                           class="switch is-rounded">
+                                                    <label for="displaySignatureDetailsToggle"></label>
+                                                </span>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="content">
+                                        <p>Увімкніть, щоб показати більше інформації про підписувача сертифіката COVID.</p>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="column is-two-thirds" id="results-col">
+                    <div id="dgc-code" hidden>
+                        <div class="container mb-5">
+                            <span class="label is-size-4">Вміст QR (закодований необроблений сертифікат)</span>
+                            <pre id="dgc-raw"></pre>
+                        </div>
+                        <div class="container mb-5">
+                            <span class="label is-size-4">Необроблений сертифікат</span>
+                            <pre class="cert-panel"><code id="dgc-json"></code></pre>
+                        </div>
+                    </div>
+                    <div id="dgc-hr" hidden>
+                            <span class="label is-size-4 is-unselectable">
+                                <h2> Зміст сертифіката</h2>
+                            </span>
+                        <div class="notification is-warning is-light mb-6" id="error-bar" hidden>
+                            <div class="mb-2">
+                                <span class="icon"><i class="fas fa-exclamation-triangle"></i></span>
+                                <strong id="error-title">Помилка</strong>
+                            </div>
+                            <div class="container">
+                                <div class="content">
+                                        <span>
+                                            <!-- ERROR_TEXT here -->
+                                        </span>
+                                    <span id="error-text"></span>
+                                </div>
+                                <div class="text-breakable content" hidden>
+                                    <span>QR вміст:</span>
+                                    <span id="qr-decoded-content" class="text-breakable">немає</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="progress" class="block is-flex is-align-items-center is-hidden">
+                                <span class="mr-2">
+                                    <div class="button is-loading is-white" style="background: transparent;"></div>
+                                </span>
+                            <span>
+                                    <strong id="progress-text">Завантаження</strong>
+                                </span>
+                        </div>
+
+
+                        <div id="signature-verified-notification" class="notification is-success is-light mb-5"
+                            hidden >
+                            <div class="mb-2">
+                                <strong>✔️ Підпис перевірено</strong>
+                            </div>
+                            <div class="container">
+                                <div class="content">
+                                        <span>Документ дає підстави для створення електронного медичного запису про вакцинацію
+                                            в Електронній системі охорони здоров'я.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="signature-invalid-notification" class="notification is-danger is-light mb-5"
+                             hidden>
+                            <div class="mb-2">
+                                <strong>❌ Завантажений документ є COVID-сертифікатом, але його не вдається розкодувати.</strong>
+                            </div>
+                            <div class="container">
+                                <div class="content">
+                                    <span>
+                                        Заповніть форму запиту технічної підтримки
+                                       ,
+                                        <a href="https://mozlikari.adelina.com.ua/"> mozlikari.adelina.com.ua,</a>
+                                        обов'язково додавши файл в якому міститься
+                                        QR цього COVID-сертифікату.
+                                        Ми намагатимемося якомога швидше вирішити проблему та повідомити про результат.
+                                    </span>
+<!--                                    <span>Підпис сертифіката не відповідає жодному відомому офіційному ключу.</span>-->
+<!--                                    <span>Можливі причини:</span>-->
+<!--                                    <li>сертифікат підроблений</li>-->
+<!--                                    <li>термін дії ключа видавця закінчився або його було анульовано</li>-->
+<!--                                    <li>ключ видавця ще не додано до списку сертифікатів програми</li>-->
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div id="common-group" hidden>
+                            <div id="signature-details-field" class="field mt-5 mb-6" hidden>
+                                <span class=" is-size-6 mr-2"><b>Дані підпису</b></span>
+                                <div class="mt-3">
+                                    <span class=" is-size-6 mr-2">Алгоритм: </span>
+                                    <span id="alg" class="is-size-6">[ES256 | PS256 (ECDSA)]</span>
+                                </div>
+                                <div class="mt-3">
+                                    <span class=" is-size-6 mr-2">Key identifier (KID): </span>
+                                    <!-- <span id="kid" class="is-size-6 is-family-monospace has-text-weight-semibold has-background-info-light"></span> -->
+                                    <span>
+                                            <code id="kid" class="i-size-6 has-text-black"></code>
+                                        </span>
+                                </div>
+                                <div class="mt-3">
+                                    <span class=" is-size-6 mr-2">Підписувач: </span>
+                                    <span id="cert-co" class="is-size-6"></span>
+                                </div>
+                                <!-- <div class="mt-3">
+                                    <span class=" is-size-6 mr-2">Публічний ключ (PEM, base64): </span>
+                                    <pre id="pubkey-pem" class="is-size-6"></pre>
+                                </div> -->
+                            </div>
+                            <div class="mb-5" id="cert-info-group">
+                                <div class="field">
+                                    <div>
+                                        <span class=" is-size-6 mr-2"><b>Тип сертифіката: </b></span>
+                                        <b><span id="cert-type"
+                                                 class="has-text-primary is-size-6">[невідомий]</span></b>
+                                    </div>
+                                    <div class="mt-3">
+                                        <span class=" is-size-6 mr-2">Версія схеми:</span>
+                                        <span id="ver" class="is-size-6"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="person-group">
+                                <div class="columns">
+                                    <div class="column">
+                                        <div class="field">
+                                            <span class="label">Прізвище</span>
+                                            <input type="text" id="fn" class="dgc input"
+                                                   placeholder="наприклад: Шевченко" readonly>
+                                        </div>
+                                        <div class="field">
+                                            <span class="label">Ім'я</span>
+                                            <input type="text" id="gn" class="dgc input"
+                                                   placeholder="наприклад: Андрій" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="column">
+                                        <div class="field">
+                                            <span class="label">Прізвище(англ.)</span>
+                                            <input type="text" id="fnt" class="dgc input"
+                                                   placeholder="наприклад: SHEVCHENKO" readonly>
+                                        </div>
+                                        <div class="field">
+                                            <span class="label">Ім'я(англ.)</span>
+                                            <input type="text" id="gnt" class="dgc input"
+                                                   placeholder="наприклад: ANDRII" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <span class="label">Дата народження</span>
+                                    <input type="text" id="dob" class="dgc input" placeholder="напр 1984-01-12"
+                                           readonly>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div id="vaccination-group" class="mt-6" hidden>
+                            <div class="field">
+                                <span class="label">Унікальний номер сертифіката (UVCI) </span>
+                                <input type="text" id="v-ci" class="dgc input"
+                                       placeholder="e.g 01ITE7300E1AB2A84C719004F103DCB1F70A#6" readonly>
+                            </div>
+                            <div class="columns is-mobile is-gapless is-vcentered is-align-items-end">
+                                <div class="column">
+                                    <div class="field">
+                                        <span class="label">Кількість отриманих</span>
+                                        <input type="text" id="v-dn" class="dgc vaccine input"
+                                               placeholder="напр. 1/2" readonly>
+                                    </div>
+                                </div>
+                                <div class="column is-narrow">
+                                    <div class="field">
+                                        <span class="label">&nbsp</span>
+                                        <button class="button has-text-large" disabled style="border-style: none;">
+                                            /
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <span class="label">Кількість доз в серії</span>
+                                        <input type="text" id="v-sd" class="dgc vaccine input"
+                                               placeholder="напр. 1/2" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <span class="label">Дата щеплення</span>
+                                <input type="text" id="v-dt" class="dgc vaccine input"
+                                       placeholder="напр. 2021-05-18" readonly>
+                            </div>
+                            <div class="field">
+                                <span class="label">Вакцина або профілактика</span>
+                                <input type="text" id="v-vp" class="dgc vaccine input"
+                                       placeholder="напр. SARS-CoV-2 mRNA vaccine" readonly>
+                            </div>
+                            <div class="field">
+                                <span class="label">Вакцинний лікарський засіб</span>
+                                <input type="text" id="v-mp" class="dgc vaccine input" placeholder="напр. Comirnaty"
+                                       readonly>
+                            </div>
+                            <div class="field">
+                                <span class="label">Код вакцини</span>
+                                <input type="text" id="v-mpr" class="dgc vaccine input" placeholder="напр. F091123"
+                                       readonly>
+                            </div>
+                            <div class="field">
+                                <span class="label">Виробник вакцини або власник торгового посвідчення</span>
+                                <input type="text" id="v-ma" class="dgc vaccine input"
+                                       placeholder="напр. Biontech Manufacturing GmbH" readonly>
+                            </div>
+                            <div class="field">
+                                <span class="label">Націлена на хворобу або збудника</span>
+                                <input type="text" id="v-tg" class="dgc vaccine input" placeholder="напр. COVID-19"
+                                       readonly>
+                            </div>
+                            <div class="field">
+                                <span class="label">Країна, у якій зроблено вакцинацію</span>
+                                <input type="text" id="v-co" class="dgc vaccine input" placeholder="напр. Italy"
+                                       readonly>
+                            </div>
+                            <div class="field">
+                                <span class="label"> Емітент сертифіката</span>
+                                <input type="text" id="v-is" class="dgc vaccine input" placeholder="напр. МОЗ"
+                                       readonly>
+                            </div>
+
+                            <div class="field">
+                                    <span class="label">
+                                        При отриманні згоди від власника цифрового документу про вакцинацію медичний
+                                        працівник на підставі зчитаних даних може створити ЕМЗ в ЕСОЗ про вакцинацію
+                                        згідно <a href="https://zakon.rada.gov.ua/laws/show/z0187-22#Text">наказу МОЗ №
+                                            234 від 04.02.22 року (зі змінами)</a>
+                                    </span>
+
+                            </div>
+
+
+                        </div>
+
+                        <div id="test-group" class="mt-6" hidden>
+                            <div class="field">
+                                <span class="label">Unique Certificate Identifier (UVCI) </span>
+                                <input type="text" id="t-ci" class="dgc test input"
+                                       placeholder="напр. 01ITE7300E1AB2A84C719004F103DCB1F70A#6" readonly>
+                            </div>
+
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="field">
+                                        <span class="label">Зразок зібрано в</span>
+                                        <input type="text" id="t-sc" class="dgc test input"
+                                               placeholder="напр. May 3, 2021, 12:27:15 PM GMT+2" readonly>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <span class="label">Дата результату</span>
+                                        <input type="text" id="t-dr" class="dgc test input"
+                                               placeholder="напр. May 11, 2021, 2:27:15 PM GMT+2" readonly>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <span class="label">Назва тесту RAT і виробник</span>
+                                <input type="text" id="t-ma" class="dgc test input" placeholder="(none)" readonly>
+                            </div>
+                            <div class="field">
+                                <span class="label">Тип тесту</span>
+                                <input type="text" id="t-tt" class="dgc test input"
+                                       placeholder="напр. Ампліфікація нуклеїнової кислоти з детектуванням зонда"
+                                       readonly>
+                            </div>
+                            <div class="field">
+                                <span class="label">Назва тесту NAA</span>
+                                <input type="text" id="t-nm" class="dgc test input"
+                                       placeholder="напр. Roche LightCycler qPCR" readonly>
+                            </div>
+                            <div class="field">
+                                <span class="label">Країна тестування</span>
+                                <input type="text" id="t-co" class="dgc test input" placeholder="напр. Італія"
+                                       readonly>
+                            </div>
+                            <div class="field">
+                                <span class="label">Центр тестування</span>
+                                <input type="text" id="t-tc" class="dgc test input"
+                                       placeholder="напр. Policlinico Umberto I" readonly>
+                            </div>
+                            <div class="field">
+                                <span class="label">Емітент сертифіката</span>
+                                <input type="text" id="t-is" class="dgc test input"
+                                       placeholder="напр. Ministero della Salute" readonly>
+                            </div>
+                            <div class="field">
+                                <span class="label">Цільова хвороба або агент</span>
+                                <input type="text" id="t-tg" class="dgc test input" placeholder="напр. COVID-19"
+                                       readonly>
+                            </div>
+                            <div class="field">
+                                <span class="label">Результати тесту</span>
+                                <input type="text" id="t-tr" class="dgc test input" placeholder="напр. Не виявлено"
+                                       readonly>
+                            </div>
+                        </div>
+
+
+                        <div id="recovery-group" class="mt-6" hidden>
+                            <div class="field">
+                                <span class="label">Unique Certificate Identifier (UVCI) </span>
+                                <input type="text" id="r-ci" class="dgc recovery input"
+                                       placeholder="напр. 01ITE7300E1AB2A84C719004F103DCB1F70A#6" readonly>
+                            </div>
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="field">
+                                        <span class="label">Сертифікат дійсний з</span>
+                                        <input type="text" id="r-df" class="dgc recovery input"
+                                               placeholder="напр. 2021-04-05" readonly>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="field">
+                                        <span class="label">Сертифікат дійсний до</span>
+                                        <input type="text" id="r-du" class="dgc recovery input"
+                                               placeholder="напр. 2021-10-31" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <span class="label">Країна</span>
+                                <input type="text" id="r-co" class="dgc recovery input" placeholder="напр. Україна"
+                                       readonly>
+                            </div>
+                            <div class="field">
+                                <span class="label">Емітент сертифіката</span>
+                                <input type="text" id="r-is" class="dgc recovery input" placeholder="напр. МОЗ"
+                                       readonly>
+                            </div>
+                            <div class="field">
+                                <span class="label">Цільова хвороба або агент</span>
+                                <input type="text" id="r-tg" class="dgc recovery input" placeholder="напр. COVID-19"
+                                       readonly>
+                            </div>
+                            <div class="field">
+                                <span class="label">Дата першого позитивного результату NAA тесту</span>
+                                <input type="text" id="r-fr" class="dgc recovery input"
+                                       placeholder="напр. 2021-04-03" readonly>
+                            </div>
+                        </div>
+
+
+                        <div id="load-tip" class="section is-unselectable">
+                            <div class="section has-text-centered content is-vcentered">
+                                <p class="is-size-2 mb-5">🔍</p>
+                                <p>
+                                    Тут відображатимуться результати зчитування
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: flex-end;">
+                        <button type="button" class="button file-cta is-primary" id="myBtn" data-toggle="modal"
+                                data-target="#myModal">Допомога
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Поширені питання щодо роботи зчитувача цифрових документів про
+                    вакцинацію</h4>
+                <div style="display: flex; justify-content: flex-end;">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+            </div>
+            <div class="modal-body">
+                <h6><b>Чому виникає помилка 405 Not Allowed?</b></h6>
+                <br/>
+                <p>В де-яких браузерах може виникнути помилка 405 Not Allowed, якщо перезавантажувати сторінку
+                    зчитувача кнопкою браузера
+                    “Оновити”. Для уникнення цієї помилки рекомендується перезайти на сайт зчитувача.
+                </p>
+                <hr>
+                <h6><b>Чому виникає помилка “Не вдається розпізнати QR-код у завантаженому файлі”?</b></h6>
+                <br/>
+                <p>Зображення qr-коду неналежної якості. Рекомендується зробити зображення більшої якості,
+                    перевірити формат файлу (*.jpeg,
+                    *.jpg, *.png, *.pdf), перевірити, щоб зображення qr-коду було близько до квадратного зображення
+                </p>
+                <hr>
+
+                <h6><b>Я додаю QR-код COVID-сертифікату міжнародного зразка, але інформація не зчитується та виникає
+                    помилка “Отриманий QR код
+                    не відповідає форматам сертифікатів EUDCC, HC, DDCC“?</b></h6>
+                <br/>
+
+                <p>Необхідно переконатися, що сертифікат є іноземний COVID-сертифікат формату DCC. Зчитувач не
+                    опрацьовує такі формати
+                    сертифікатів як:
+                <ol data-indent-level="1">
+                    <li>
+                        <p>Міжнародне свідоцтво про вакцинацію та профілактику видане іноземною державою
+                            – ICVP.&nbsp;</p>
+                    </li>
+                    <li>
+                        <p>Документ, що посвідчує вакцинацію від COVID-19 у США – CDC.&nbsp;</p>
+                    </li>
+                    <li>
+                        <p>Карта здоровʼя/Health Card CVs – HCCV.</p>
+                    </li>
+                    <li>
+                        <p>Документи про вакцинацію, які Україна визнала згідно двосторонніх
+                            домовленостей – FVD.</p>
+                    </li>
+                </ol>
+                </p>
+                <hr>
+                <h6><b>Я додаю QR-код належної якості іноземного COVID-сертифікату формату DCC , але зчитувач не
+                    опрацьовує його та видає
+                    помилку “Недійсний формат сертифіката. TypeError: Cannot read properties of undefined
+                    (reading '0')”?</b></h6>
+                <br/>
+
+                <p>Переконайтеся, що це сертифікат про вакцинацію. Зчитувач не опрацьовує сертифікати про одужання
+                    та результати
+                    тестування, тобто сертифікат може містити інформацію не про вакцинацію.</p>
+                <hr>
+                <h6><b>Я додаю QR-код належної якості іноземного COVID-сертифікату формату DCC про вакцинацію , але
+                    зчитувач не опрацьовує
+                    його.</b></h6>
+                <br/>
+
+                <p>Переконайтеся, що даний сертифікат про вакцинацію від хвороби COVID-19.</p>
+                <hr>
+                <h6><b>Я додаю QR-код належної якості іноземного COVID-сертифікату формату DCC про вакцинацію від
+                    хвороби COVID-19, але
+                    зчитувач не опрацьовує його та видає нечитабельні помилки.</b></h6>
+                <br/>
+
+                <p>У випадку коли зчитувач в результатах обробки видає помилки, але очікується, що сертифікат
+                    повинен зчитуватися, тоді, будь ласка, зверніться в <br/><a
+                            href="https://mozlikari.adelina.com.ua/" target="_blank">
+                            <span class="icon is-small">
+                                <i class="fa fa-life-ring" aria-hidden="true"></i>
+                            </span>
+                        <span>техпідтримку</span>
+                    </a>
+                    <br/>
+                    Ймовірно, ви зіткнулись із технічною помилкою. Можливо буде внести дані сертифіката після
+                    виправлення на стороні
+                    сервісу.
+                </p>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="button is-small is-warning is-responsive is-rounded"
+                        data-dismiss="modal">Зачинити
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('service-worker.js', {scope: './'})
+            .then(registration => {
+                console.log('Registration successful, scope is:', registration.scope);
+
+                function listenForWaitingServiceWorker(reg, callback) {
+                    function awaitStateChange() {
+                        reg.installing.addEventListener('statechange', function () {
+                            if (this.state === 'installed') callback(reg);
+                        });
+                    }
+
+                    if (reg.waiting) return callback(reg);
+                    if (reg.installing) awaitStateChange();
+                    reg.addEventListener('updatefound', awaitStateChange);
+                }
+
+                listenForWaitingServiceWorker(registration, () => {
+                    //console.info("Service worker updated!");
+                    if (navigator.serviceWorker.controller) {
+                        // A previous service worker version was already installed
+                        document.getElementById("update-notification").classList.remove("is-hidden");
+                        document.getElementById("app-update-btn").addEventListener("click", event => {
+                            event.preventDefault();
+                            registration.waiting.postMessage('SKIP_WAITING');
+                            window.location.reload();
+                        })
+                    } else {
+                        // First service worker installation
+                        document.getElementById("offline-ready-notification").classList.remove("is-hidden");
+                    }
+                })
+
+                // refresh every opened tab/window when the user hits the reload button
+                let refreshing = false;
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    window.location.reload()
+                    if (!refreshing) {
+                        refreshing = true
+                    }
+                })
+
+            })
+            .catch(error => {
+                console.log('Помилка реєстрації Service Worker, помилка:', error);
+            });
+    }
+</script>
+</body>
+
+</html>
