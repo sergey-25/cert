@@ -72566,6 +72566,7 @@ Call removeLoopDetectors before resuming.`)
     exports.getQRCanvas = getQRCanvas;
     exports.hideProgress = hideProgress;
     exports.hideQRCanvas = hideQRCanvas;
+    exports.hideVerifiedNotification = hideVerifiedNotification;
     exports.reset = reset;
     exports.scannerVideo = exports.scanner = exports.scanButton = void 0;
     exports.setProgressText = setProgressText;
@@ -72644,10 +72645,18 @@ Call removeLoopDetectors before resuming.`)
     }
 
     function hideQRCanvas() {
+        document.getElementById("format-text").hidden = false;
       document.getElementById("drag-drop-text").hidden = false;
       document.getElementsByClassName("canvas-wrapper")[0].classList.add("is-hidden");
     } // Human Readable TOGGLE
-
+        function hideVerifiedNotification(err) {
+           if (err){
+               document.getElementById("signature-verified-notification").classList.add("is-hidden");
+               document.getElementById("hide-btn-text").classList.add("is-hidden");
+               document.getElementById("is-authentic-text").classList.add("is-hidden");
+               document.getElementById("format-text").classList.add("is-hidden");
+           }
+        }
 
     document.querySelector("#dgcHumanReadableToggle").addEventListener("click", function (event) {
       toggleDecodedHCertView(event.target.checked);
@@ -72707,6 +72716,10 @@ Call removeLoopDetectors before resuming.`)
 
       switch (type) {
         case "v":
+            document.getElementById("signature-verified-notification").classList.remove("is-hidden");
+            document.getElementById("hide-btn-text").classList.remove("is-hidden");
+            document.getElementById("is-authentic-text").classList.remove("is-hidden");
+            document.getElementById("format-text").classList.remove("is-hidden");
           vgroup.hidden = false;
           cert_type.innerText = "Щеплення";
           break;
@@ -72792,6 +72805,7 @@ Call removeLoopDetectors before resuming.`)
         case false:
           document.getElementById("signature-invalid-notification").hidden = false;
             document.getElementById("show-btn-text").hidden = false;
+            document.getElementById("format-text").hidden = false;
           break;
 
         case true:
@@ -73658,17 +73672,7 @@ Call removeLoopDetectors before resuming.`)
                 UI.displayDecodedHCERT(hrDGC);
                 //console.log(dgc.getMp.mp); 
               } catch (err) {
-                  if(err){
-                      document.getElementById("signature-verified-notification").classList.add("is-hidden")
-                      document.getElementById("hide-btn-text").classList.add("is-hidden")
-                      document.getElementById("is-authentic-text").classList.add("is-hidden")
-                      document.getElementById("format-text").classList.add("is-hidden")
-                  }else{
-                      document.getElementById("signature-verified-notification").classList.remove("is-hidden")
-                      document.getElementById("hide-btn-text").classList.remove("is-hidden")
-                      document.getElementById("is-authentic-text").classList.remove("is-hidden")
-                      document.getElementById("format-text").classList.remove("is-hidden")
-                  }
+                  UI.hideVerifiedNotification(err)
                 UI.showErrorMessage(err, "Недійсний формат сертифіката", "Зчитаний файл є COVID-сертифікатом, але підтверджує не вакцинацію.");
               } // Signature Verification!
 
@@ -73720,9 +73724,9 @@ Call removeLoopDetectors before resuming.`)
                 _context2.next = 4;
                 break;
               }
-
               UI.hideQRCanvas();
-              UI.showErrorMessage(Error("Будь-ласка, завантажте файл jpg, або png, або pdf."), "Завантажений формат графічного файлу не підтримано.\n");
+              UI.showErrorMessage(Error("Будь-ласка, завантажте файл jpg, або png, або pdf."),
+                  "Завантажений формат графічного файлу не підтримано.\n");
               return _context2.abrupt("return");
 
             case 4:
