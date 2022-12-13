@@ -72577,6 +72577,7 @@ Call removeLoopDetectors before resuming.`)
     exports.signatureDetailsToggle = void 0;
     exports.toggleDecodedHCertView = toggleDecodedHCertView;
 
+
     function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() { }; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
     function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -72619,7 +72620,7 @@ Call removeLoopDetectors before resuming.`)
         document.getElementById("format-text").hidden = true;
         document.getElementById("is-authentic-text").hidden = true;
         document.getElementById("show-btn-text").hidden = true;
-      signatureDetails.hidden = true;
+      signatureDetails.hidden = false;
       document.getElementById("cert-co").innerText = "unavailable";
       document.getElementById("kid").innerText = "";
       document.getElementById("alg").innerText = "";
@@ -72658,33 +72659,59 @@ Call removeLoopDetectors before resuming.`)
            }
         }
 
+
     document.querySelector("#dgcHumanReadableToggle").addEventListener("click", function (event) {
       toggleDecodedHCertView(event.target.checked);
+      console.log(event.target.checked)
     });
-
+    
+    document.querySelector("#dgcHumanNotReadableToggle").addEventListener("click", function (event) {
+      toggleBtn(event.target.checked);
+      console.log(event.target.checked)
+    });
+  
+  
     function toggleDecodedHCertView(checked) {
-      document.querySelector("#dgc-code").hidden = checked;
-      document.querySelector("#dgc-hr").hidden = !checked;
+     
+        document.querySelector("#dgc-code").hidden = checked 
+      document.querySelector("#dgc-hr").hidden = !checked; 
+      document.querySelector("#dgcHumanNotReadableToggle").checked=checked 
+      document.querySelector("#dgcHumanReadableToggle").checked= checked 
     } // Apply toggle default state
 
+    function toggleBtn(checked) {
+     
+      document.querySelector("#dgc-code").hidden =checked 
+    document.querySelector("#dgc-hr").hidden = !checked; 
+    document.querySelector("#dgcHumanReadableToggle").checked= checked 
+    document.querySelector("#dgcHumanNotReadableToggle").checked=checked 
+  }
 
     window.addEventListener("load", function () {
       var toggle = document.querySelector("#dgcHumanReadableToggle");
       toggleDecodedHCertView(toggle.checked);
     }); // Signature details TOGGLE
 
-    var signatureDetailsToggle = document.querySelector("#displaySignatureDetailsToggle");
-    exports.signatureDetailsToggle = signatureDetailsToggle;
+    window.addEventListener("load", function () {
+      var toggle = document.querySelector("#dgcHumanNotReadableToggle");
+      toggleBtn(toggle.checked);
+    });
+
+
+    // var signatureDetailsToggle = document.querySelector("#displaySignatureDetailsToggle");
+    // exports.signatureDetailsToggle = signatureDetailsToggle;
     var signatureDetails = document.querySelector("#signature-details-field");
+    //
+    // function toggleSignatureDetails(checked) {
+    //   signatureDetails.hidden = !checked;
+    // }
 
-    function toggleSignatureDetails(checked) {
-      signatureDetails.hidden = !checked;
-    }
+    // signatureDetailsToggle.addEventListener("click", function (event) {
+    //   toggleSignatureDetails(event.target.checked);
+    // }); // ERROR BAR
 
-    signatureDetailsToggle.addEventListener("click", function (event) {
-      toggleSignatureDetails(event.target.checked);
-    }); // ERROR BAR
 
+        
     function showErrorMessage(err) {
       var error_title = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "Помилка";
       var error_text = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
@@ -72720,6 +72747,7 @@ Call removeLoopDetectors before resuming.`)
             document.getElementById("hide-btn-text").classList.remove("is-hidden");
             document.getElementById("is-authentic-text").classList.remove("is-hidden");
             document.getElementById("format-text").classList.remove("is-hidden");
+            document.querySelector("#signature-details-field").hidden = false
           vgroup.hidden = false;
           cert_type.innerText = "Щеплення";
           break;
@@ -72821,13 +72849,14 @@ Call removeLoopDetectors before resuming.`)
     }
 
     function displaySignatureDetails(kid, alg) {
-      var displayStatus = signatureDetailsToggle.checked;
+      // var displayStatus = signatureDetailsToggle.checked;
 
-      if (displayStatus === true) {
+      // if (displayStatus === true) {
         signatureDetails.hidden = false;
-      }
+      // }
 
       document.getElementById("kid").innerText = kid;
+      document.getElementById("kid-human-not-readable").innerText = kid;
 
       /* fetch("assets/it_dgc_public_keys.json")
       .then(res => res.json())
@@ -72862,10 +72891,13 @@ Call removeLoopDetectors before resuming.`)
       } */
 
       document.getElementById("alg").innerText = alg_decoder[alg] ? alg_decoder[alg] : alg;
+
+       document.getElementById("alg-human-not-readable").innerText = alg_decoder[alg] ? alg_decoder[alg] : alg;
     }
 
     function displaySigner(str) {
       document.getElementById("cert-co").innerText = str;
+      document.getElementById("cert-human-not-readable").innerText = str;
     }
 
     var scanButton = document.getElementById("start-scan");

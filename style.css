@@ -27,6 +27,28 @@ print {
         max-width: 28rem;
     }
 }
+@media only screen and (max-width: 600px) {
+    .section {
+      padding: 10px;
+    }
+    .block{
+        margin-bottom: 0;
+    }
+    .title{
+        font-size: 20px; 
+        margin-bottom: 0;
+    }
+    .cert-core{
+        display: flex;
+        flex-direction: column;
+    }
+    .switch-btn-wrapper{
+        display: flex;
+        align-self: center;
+        flex-flow: row-reverse;
+        align-items: baseline !important;
+    }
+  }
 
 pre.cert-panel {
     min-height: 30.5rem
@@ -55,8 +77,20 @@ pre.cert-panel {
 }
 h1{
 font-size: 30px;
+
 }
 
+.title{
+    font-size: 20px; 
+    
+}
+.container-title{
+    text-align: start;
+}
+.cert-core{
+    display: flex;
+    justify-content: space-between;
+}
 ol {
     display: block;
     list-style-type: decimal;
@@ -66,3 +100,15 @@ ol {
     margin-inline-end: 0px;
     padding-inline-start: 40px;
 }
+.tippy-box[data-theme~='tomato'] {
+    top: 100px;
+    background-color: rgba(0, 0, 0, 0.615);
+    color: #fff;
+    width: 200px;
+  }
+  .tippy-box[data-theme~='btn'] {
+    /* top: 130px; */
+    background-color: rgba(0, 0, 0, 0.615);
+    color: #fff;
+    width: 200px;
+  }
