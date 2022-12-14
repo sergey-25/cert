@@ -48,6 +48,9 @@ print {
         flex-flow: row-reverse;
         align-items: baseline !important;
     }
+    .switch[type=checkbox].is-rounded+label::after, .switch[type=checkbox].is-rounded+label:after {
+        top: 7px !important;
+    }
   }
 
 pre.cert-panel {
@@ -84,8 +87,14 @@ font-size: 30px;
     font-size: 20px; 
     
 }
+.label-title{
+    font-size: 15px;
+}
 .container-title{
     text-align: start;
+}
+.text-right{
+    
 }
 .cert-core{
     display: flex;
@@ -112,3 +121,9 @@ ol {
     color: #fff;
     width: 200px;
   }
+  .switch[type=checkbox]+label::before, .switch[type=checkbox]+label:before{
+    top: 3px !important;
+  }
+  .switch[type=checkbox].is-rounded+label::after, .switch[type=checkbox].is-rounded+label:after {
+    top: 7px !important;
+}
