@@ -88,7 +88,7 @@
             <div class="columns is-variable is-6">
                 <div class="column is-unselectable">
                     <span class="label is-size-4"></span>
-                    <div class="box mb-1">
+                    <div class="box mb-1 scanner-box">
                         <div class="container" id="myButton">
                             <div class="block has-text-centered is-flex is-justify-content-center">
                                 <div id="drag-drop-text">
@@ -168,9 +168,9 @@
                         </div>
                     </div>
 
-                    <div class="container block mb-6">
+                    <!-- <div class="container block mb-6 "> -->
 <!--                        <span class="label is-size-4">Деталі</span>-->
-                        <div class="container">
+                        <!-- <div class="container"> -->
 <!--                            <div class="box">-->
 <!--                                <div class="container-fluid">-->
 <!--                                    <div class="columns is-mobile is-vcentered">-->
@@ -217,15 +217,15 @@
 <!--                                    </div> &ndash;&gt;-->
 <!--                                </div>-->
 <!--                            </div>-->
-                        </div>
+                        <!-- </div>
                     </div>
-                </div>
+                </div> -->
 
 
                 <div class="column is-two-thirds" id="results-col">
                     <div id="dgc-code" hidden>
                         <div class="container mb-5">
-                            <span class="label is-size-4">Вміст QR (закодований необроблений сертифікат)
+                            <span class="label is-size-4 cert-title">Вміст QR (закодований необроблений сертифікат)
                                 <div class="columns is-mobile is-vcentered">
                                 <!-- <div class="column">
                                         <span class="has-text-weight-semibold pr-3">
@@ -246,11 +246,11 @@
                             <pre id="dgc-raw"></pre>
                         </div>
                         <div class="container mb-5">
-                            <span class="label is-size-4">Необроблений сертифікат</span>
+                            <span class="label is-size-4 cert-title">Необроблений сертифікат</span>
                             <pre class="cert-panel"><code id="dgc-json"></code></pre>
                         </div>
                         <div class="container mb-5">
-                            <span class="label is-size-4">Деталі підпису</span>
+                            <span class="label is-size-4 cert-title">Деталі підпису</span>
                             <pre>Алгоритм:   <code id="alg-human-not-readable"></code></pre>
                              <pre>Key identifier (KID):  <code id="kid-human-not-readable"></code></pre>
                             <pre>The signatory: <code id="cert-human-not-readable"></code></pre>
@@ -258,7 +258,7 @@
                     </div>
                     <div id="dgc-hr" hidden>
                             <span class="label is-size-4 is-unselectable cert-core">
-                                <h2> Зміст сертифіката</h2>
+                                <h2 сlass="cert-title"> Зміст сертифіката</h2>
                                  <div class="columns is-mobile is-vcentered switch-btn-wrapper">
                                         <!-- <div class="column">
                                                 <span class="has-text-weight-semibold">
@@ -275,7 +275,7 @@
                                         </div>
                                     </div>
                             </span>
-                        <div class="notification is-warning is-light mb-6" id="error-bar" hidden>
+                        <div class="notification is-warning is-light mb-6 error-bar" id="error-bar" hidden>
                             <div class="mb-2">
                                 <span class="icon"><i class="fas fa-exclamation-triangle"></i></span>
                                 <strong id="error-title">Помилка</strong>
@@ -304,12 +304,12 @@
                         </div>
 
 
-                        <div id="signature-verified-notification" class="notification is-success is-light mb-5"
+                        <div id="signature-verified-notification" class="notification is-success is-light mb-5 verified"
                             hidden >
                             <div class="mb-2">
                                 <strong>✔️ Підпис перевірено</strong>
                             </div>
-                            <div class="container">
+                            <div class="container verified-container">
                                 <div class="content">
                                         <span>Документ дає підстави для створення електронного медичного запису про вакцинацію
                                             в Електронній системі охорони здоров'я.</span>
@@ -618,7 +618,7 @@
                             </div>
                         </div>
                     </div>
-                    <div style="display: flex; justify-content: flex-end;">
+                    <div style="display: flex; justify-content: center;">
                         <button type="button" class="button file-cta is-primary" id="myBtn" data-toggle="modal"
                                 data-target="#myModal">Допомога
                         </button>

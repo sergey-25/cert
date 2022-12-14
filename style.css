@@ -38,9 +38,25 @@ print {
         font-size: 20px; 
         margin-bottom: 0;
     }
+    .scanner-box{
+        padding: 0;
+        padding-bottom: 10px;
+    }
     .cert-core{
         display: flex;
         flex-direction: column;
+    }
+    .verified{
+        margin: 0 !important;
+        padding: 10px !important;
+    }
+    .verified-container{
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    .error-bar{
+        margin: 0 !important;
+        padding: 0 !important;
     }
     .switch-btn-wrapper{
         display: flex;
@@ -80,12 +96,16 @@ pre.cert-panel {
 }
 h1{
 font-size: 30px;
-
+}
+h2{
+    font-size: 20px;
 }
 
-.title{
-    font-size: 20px; 
-    
+.title {
+    font-size: 20px !important;  
+}
+.cert-title{
+    font-size: 20px !important;  
 }
 .label-title{
     font-size: 15px;
@@ -93,10 +113,9 @@ font-size: 30px;
 .container-title{
     text-align: start;
 }
-.text-right{
-    
-}
+
 .cert-core{
+    align-items: center;
     display: flex;
     justify-content: space-between;
 }
