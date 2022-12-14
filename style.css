@@ -67,6 +67,9 @@ print {
     .switch[type=checkbox].is-rounded+label::after, .switch[type=checkbox].is-rounded+label:after {
         top: 7px !important;
     }
+    .ddd{
+        background-color: red;
+    }
   }
 
 pre.cert-panel {
