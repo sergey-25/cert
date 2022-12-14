@@ -68,9 +68,7 @@ print {
         top: 7px !important;
     }
     .slider-wrapp{
-        background-color: red;
-        display: flex;
-        justify-content: space-around;
+       text-align: center;
         min-width: 300px;
     }
   }
