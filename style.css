@@ -70,6 +70,8 @@ print {
     .slider-wrapp{
         background-color: red;
         display: flex;
+        justify-content: space-around;
+        min-width: 300px;
     }
   }
 
