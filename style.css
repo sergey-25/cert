@@ -59,16 +59,17 @@ print {
         padding: 0 !important;
     }
     .switch-btn-wrapper{
-        display: flex;
+        /* display: flex;
         align-self: center;
         flex-flow: row-reverse;
-        align-items: baseline !important;
+        align-items: baseline !important; */
     }
     .switch[type=checkbox].is-rounded+label::after, .switch[type=checkbox].is-rounded+label:after {
         top: 7px !important;
     }
-    .ddd{
+    .slider-wrapp{
         background-color: red;
+        display: flex;
     }
   }
 
