@@ -113,6 +113,7 @@ h2{
 }
 .label-title{
     font-size: 15px;
+    font-weight: 700;
 }
 .container-title{
     text-align: start;
@@ -122,6 +123,11 @@ h2{
     align-items: center;
     display: flex;
     justify-content: space-between;
+}
+.not-readable-slider{
+    margin-top: 24px;
+    margin-bottom: 10px;
+   text-align: end;
 }
 ol {
     display: block;
