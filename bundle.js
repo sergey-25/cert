@@ -72535,10 +72535,8 @@ Call removeLoopDetectors before resuming.`)
 
     function loadValueSets() {
       var promises = [];
-      console.log(promises)
       Object.keys(valueSets).forEach(function (k) {
         var elem = valueSets[k];
-        console.log(elem)
         promises.push(fetch(elem.path).then(function (res) {
           return res.json();
         }).then(function (json) {
