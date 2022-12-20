@@ -72490,43 +72490,43 @@ Call removeLoopDetectors before resuming.`)
     var valueSets = {
       "test-manf": {
         abbr: "ma",
-        url: "https://raw.githubusercontent.com/ehn-dcc-development/ehn-dcc-valuesets/release/2.0.0/test-manf.json",
+        path: "../vs/covid-19-lab-test-manufacturer-and-name.json",
         json: null
       },
       "country-codes": {
         abbr: "co",
         //url: "https://raw.githubusercontent.com/ehn-dcc-development/ehn-dcc-valuesets/release/2.0.0/country-2-codes.json",
-        url: "https://raw.githubusercontent.com/svc-git/dgc-dict/main/country-2-codes.json",
+        path: "../vs/country-2-codes.json",
         json: null
       },
       "disease-agent-targeted": {
         abbr: "tg",
-        url: "https://raw.githubusercontent.com/ehn-dcc-development/ehn-dcc-valuesets/release/2.0.0/disease-agent-targeted.json",
+        path: "../vs/disease-agent-targeted.json",
         json: null
       },
       "test-result": {
         abbr: "tr",
-        url: "https://raw.githubusercontent.com/ehn-dcc-development/ehn-dcc-valuesets/release/2.0.0/test-result.json",
+        path: "../vs/covid-19-lab-result.json",
         json: null
       },
       "test-type": {
         abbr: "tt",
-        url: "https://raw.githubusercontent.com/ehn-dcc-development/ehn-dcc-valuesets/release/2.0.0/test-type.json",
+        path: "../vs/covid-19-lab-test-type.json",
         json: null
       },
       "vaccine-mah-manf": {
         abbr: "ma",
-        url: "https://raw.githubusercontent.com/ehn-dcc-development/ehn-dcc-valuesets/release/2.0.0/vaccine-mah-manf.json",
+        path: "../vs/vaccines-covid-19-auth-holders.json",
         json: null
       },
       "vaccine-medicinal-product": {
         abbr: "mp",
-        url: "https://raw.githubusercontent.com/ehn-dcc-development/ehn-dcc-valuesets/release/2.0.0/vaccine-medicinal-product.json",
+        path: "../vs/vaccines-covid-19-names.json",
         json: null
       },
       "vaccine-prophilaxis": {
         abbr: "vp",
-        url: "https://raw.githubusercontent.com/ehn-dcc-development/ehn-dcc-valuesets/release/2.0.0/vaccine-prophylaxis.json",
+        path: "../vs/sct-vaccines-covid-19.json",
         json: null
       }
     };
@@ -72535,9 +72535,11 @@ Call removeLoopDetectors before resuming.`)
 
     function loadValueSets() {
       var promises = [];
+      console.log(promises)
       Object.keys(valueSets).forEach(function (k) {
         var elem = valueSets[k];
-        promises.push(fetch(elem.url).then(function (res) {
+        console.log(elem)
+        promises.push(fetch(elem.path).then(function (res) {
           return res.json();
         }).then(function (json) {
           return elem.json = json;
@@ -72662,12 +72664,10 @@ Call removeLoopDetectors before resuming.`)
 
     document.querySelector("#dgcHumanReadableToggle").addEventListener("click", function (event) {
       toggleDecodedHCertView(event.target.checked);
-      console.log(event.target.checked)
     });
     
     document.querySelector("#dgcHumanNotReadableToggle").addEventListener("click", function (event) {
       toggleBtn(event.target.checked);
-      console.log(event.target.checked)
     });
   
   
@@ -72709,6 +72709,15 @@ Call removeLoopDetectors before resuming.`)
     // signatureDetailsToggle.addEventListener("click", function (event) {
     //   toggleSignatureDetails(event.target.checked);
     // }); // ERROR BAR
+    function URLify(string){
+      const urls = string.match(/((((ftp|https?):\/\/)|(w{3}\.))[\-\w@:%_\+.~#?,&\/\/=]+)/g);
+      if (urls) {
+        urls.forEach(function (url) {
+          string = string.replace(url, '<a target="_blank" href="' + url + '">' + url + "</a>");
+        });
+      }
+      return string.replace("(", "<br/>(");
+    }
 
 
         
@@ -72722,6 +72731,8 @@ Call removeLoopDetectors before resuming.`)
       if (display_in_raw_field) document.querySelector("#dgc-json").textContent = error_title + "\n" + message;
       document.querySelector("#error-title").textContent = error_title;
       document.querySelector("#error-text").textContent = message;
+      const span = document.querySelector("#error-text");
+span.innerHTML = URLify(span.innerText);
       document.querySelector("#error-bar").hidden = false;
       document.querySelector("#progress").classList.add("is-hidden");
         document.getElementById("show-btn-text").hidden = false;
@@ -72747,7 +72758,7 @@ Call removeLoopDetectors before resuming.`)
             document.getElementById("hide-btn-text").classList.remove("is-hidden");
             document.getElementById("is-authentic-text").classList.remove("is-hidden");
             document.getElementById("format-text").classList.remove("is-hidden");
-            document.querySelector("#signature-details-field").hidden = false
+            document.querySelector("#signature-details-field").hidden = true
           vgroup.hidden = false;
           cert_type.innerText = "Щеплення";
           break;
@@ -72813,8 +72824,26 @@ Call removeLoopDetectors before resuming.`)
     } // Display raw certificate values
 
 
-    function displayRawText(text) {
-      document.querySelector("#dgc-raw").textContent = text;
+    function displayRawText(text, dgc,) {
+     document.querySelector("#dgc-raw").textContent = text; 
+      
+    // console.log('sfsdfdsf:', inputText)
+    // if(inputText === dgc.encodedText){
+    //   document.querySelector("#dgc-raw").textContent = ''; 
+    //   console.log('sfsdfdsf:')
+    // }
+    
+
+      // if(text.toString() === dgc.encodedText.toString()){
+      //   document.querySelector("#dgc-raw").textContent = '';
+      // }
+      // if(text !== dgc.encodedText){
+      //   document.querySelector("#dgc-raw").textContent = text; 
+      // }
+
+  // console.log(dgc.encodedText)
+
+  //       document.querySelector("#dgc-raw").textContent = text;  
     }
 
     function displayRawHCERT(json) {
@@ -72852,7 +72881,7 @@ Call removeLoopDetectors before resuming.`)
       // var displayStatus = signatureDetailsToggle.checked;
 
       // if (displayStatus === true) {
-        signatureDetails.hidden = false;
+        signatureDetails.hidden = true;
       // }
 
       document.getElementById("kid").innerText = kid;
@@ -73666,6 +73695,26 @@ Call removeLoopDetectors before resuming.`)
     return _loadDGCFromString.apply(this, arguments);
   }
 
+
+// Refresh page after 10 minutes if no activities
+  let time = new Date().getTime();
+const setActivityTime = (e) => {
+  time = new Date().getTime();
+}
+
+document.body.addEventListener("mousemove", setActivityTime);
+document.body.addEventListener("keypress", setActivityTime);
+const refresh = () => {
+  if (new Date().getTime() - time >= 600000) {
+    window.location.reload(true);
+  } else {
+    setTimeout(refresh, 10000);
+  }
+}
+setTimeout(refresh, 10000);
+
+
+
   function _loadDGCFromString() {
     _loadDGCFromString = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(rawstring) {
       var canvas, dgc, rawdgc, kid, algid, hrDGC;
@@ -73689,14 +73738,14 @@ Call removeLoopDetectors before resuming.`)
 
             case 6:
               dgc = new _DGC.EUGreenCertificate(rawstring);
-              //console.log(dgc);
+              console.log(dgc);
 
               rawdgc = dgc.getRawCwt();
               kid = dgc.getKid();
               algid = dgc.getSignAlgorithm(); // Display the Certificate content
               // raw content
 
-              UI.displayRawText(dgc.getEncodedString());
+              UI.displayRawText(dgc.getEncodedString(), dgc);
               UI.displayRawHCERT(dgc.toRawString()); // parsed content
 
               try {
@@ -73757,8 +73806,8 @@ Call removeLoopDetectors before resuming.`)
                 break;
               }
               UI.hideQRCanvas();
-              UI.showErrorMessage(Error("Будь-ласка, завантажте файл jpg, або png, або pdf."),
-                  "Завантажений формат графічного файлу не підтримано.\n");
+              UI.showErrorMessage(Error("Будь-ласка, завантажте файл в форматі jpg, png, або pdf розміром до 5 Мб"),
+                  "Завантажений файл непідтримуваного формату.\n");
               return _context2.abrupt("return");
 
             case 4:
@@ -73769,12 +73818,10 @@ Call removeLoopDetectors before resuming.`)
             case 7:
               rawstring = _context2.sent;
               //console.log(rawstring)
+          
               loadDGCFromString(rawstring)["catch"](function (err) {
-                UI.showErrorMessage(err, "\"Зчитувач\" розпізнає тільки документ COVID-сертифікат у форматі EU DCC.\n" +
-                    "\n" +
-                    "Зчитування виявило, що завантажений документ в іншому форматі.\n" +
-                    "\n" +
-                    "Дійте відповідно до Наказу МОЗ № 234 від 04.02.22 року. (посилання https://zakon.rada.gov.ua/laws/show/z0187-22#Text) та інструкції (посилання https://docs.google.com/document/d/1935m-pWco0nRFAAQjT6dEKl6n2Mr7AqChDd2ZY2B0jE/edit )\n");
+              
+                UI.showErrorMessage( `Зчитувач розпізнає тільки документ COVID-сертифікат у форматі EU DCC. Зчитування виявило, що завантажений документ в іншому форма. Дійте відповідно до Наказу МОЗ № 234 від 04.02.22 року. (посилання https://zakon.rada.gov.ua/laws/show/z0187-22#Text) та інструкції (посилання https://docs.google.com/document/d/1935m-pWco0nRFAAQjT6dEKl6n2Mr7AqChDd2ZY2B0jE/edit )`);
                 // UI.showDecodedText(rawstring);
               });
               _context2.next = 15;

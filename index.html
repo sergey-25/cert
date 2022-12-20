@@ -242,8 +242,7 @@
                                          <label for="dgcHumanNotReadableToggle"></label>
                                          <span class="label-title">Лікарям</span>
                              </div>
-                           
-                            <pre id="dgc-raw"></pre>
+                           <pre id="dgc-raw"></pre>
                         </div>
                         <div class="container mb-5">
                             <span class="label is-size-4 ">Необроблений сертифікат</span>
@@ -275,7 +274,7 @@
                                         </div>
                                     </div>
                             </span>
-                        <div class="notification is-warning is-light mb-6" id="error-bar" hidden>
+                        <div class="notification is-warning is-light mb-6 warning" id="error-bar" hidden>
                             <div class="mb-2">
                                 <span class="icon"><i class="fas fa-exclamation-triangle"></i></span>
                                 <strong id="error-title">Помилка</strong>
@@ -783,9 +782,11 @@
     }
 </script>
 <script>
+    
 
  tippy('#myButton', {
-  content: "Використайте, щоб завантажитидокумент провакцинацію.",
+    animation: true,
+  content: "Використайте, щоб завантажити документ провакцинацію.",
   animation: 'scale',
   arrow:false,
   duration:[500, 500],

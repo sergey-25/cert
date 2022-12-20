@@ -58,18 +58,19 @@ print {
         margin: 0 !important;
         padding: 0 !important;
     }
-    .switch-btn-wrapper{
-        /* display: flex;
-        align-self: center;
-        flex-flow: row-reverse;
-        align-items: baseline !important; */
-    }
+
     .switch[type=checkbox].is-rounded+label::after, .switch[type=checkbox].is-rounded+label:after {
         top: 7px !important;
     }
     .slider-wrapp{
        text-align: center;
         min-width: 300px;
+    }
+    .tippy-box[data-theme~='tomato']{
+        display:none
+    }
+    .tippy-box[data-theme~='btn']{
+        display:none
     }
   }
 
@@ -155,4 +156,8 @@ ol {
   }
   .switch[type=checkbox].is-rounded+label::after, .switch[type=checkbox].is-rounded+label:after {
     top: 7px !important;
+}
+.warning{
+    background-color: #feecf0 !important;
+    color: #cc0f35 !important;
 }
