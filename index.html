@@ -22,6 +22,9 @@
     <link rel="manifest" href="manifest.webmanifest">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+<meta http-equiv='cache-control' content='no-cache'>
+<meta http-equiv='expires' content='0'>
+<meta http-equiv='pragma' content='no-cache'>
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Digital COVID Certificate Decoder">
@@ -96,12 +99,13 @@
                                         <i class="fas fa-qrcode"></i>
                                     </div>
                                     <div>
-                                        <p class="is-hidden-touch">
+                                        <!-- <p class="is-hidden-touch">
                                             Перетягніть QR-код у це поле
+                                        </p> -->
+                                        <p>
+                                            Завантажте цифровий документ про вакцинацію
                                         </p>
-                                        <p class="is-hidden-desktop">
-                                            Сертифікат не завантажено
-                                        </p>
+                                        <!-- class="is-hidden-desktop" -->
                                     </div>
                                 </div>
                             </div>
@@ -110,7 +114,7 @@
                                 <video id="camera-stream"></video>
                             </div>
                             <div class="block canvas-wrapper is-hidden">
-                                <p id="is-authentic-text">Документ завантажено</p>
+                                <p id="is-authentic-text" class="text">Документ завантажено</p>
                                 <canvas id="qr-canvas" height=300 width=300>
                                     Цей браузер не підтримує HTML5 Canvas.
                                     Ця програма може не працювати належним чином без Canvas API.
@@ -138,7 +142,7 @@
                                                         <input class="file-input" type="file" name="reader"
                                                                id="file-selector"
                                                                accept=".jpg, .jpeg, .png, .bmp, .webp, .tiff,.pdf">
-                                                        <span class="button file-cta is-primary">
+                                                        <span class="button file-cta is-primary" id="upload-btn">
                                                             <span class="file-icon">
                                                                 <i class="fas fa-upload"></i>
                                                             </span>
@@ -277,11 +281,12 @@
                         <div class="notification is-warning is-light mb-6 warning" id="error-bar" hidden>
                             <div class="mb-2">
                                 <span class="icon"><i class="fa fa-close">❌</i></span>
-                                <strong id="error-title">Помилка</strong>
+                                <strong id="error-title"></strong>
                             </div>
                             <div class="container">
                                 <div class="content">
                                         <span>
+                                            <p id="demo2"></p>
                                             <!-- ERROR_TEXT here -->
                                         </span>
                                     <span id="error-text"></span>
@@ -303,10 +308,10 @@
                         </div>
 
 
-                        <div id="signature-verified-notification" class="notification is-success is-light mb-5"
+                        <div id="signature-verified-notification" class="notification is-success is-light mb-5 success"
                             hidden >
                             <div class="mb-2">
-                                <strong>✔️ Підпис перевірено</strong>
+                                <strong>✔️</strong>
                             </div>
                             <div class="container">
                                 <div class="content">
@@ -448,9 +453,9 @@
                                        placeholder="напр. 2021-05-18" readonly>
                             </div>
                             <div class="field">
-                                <span class="label">Вакцина або профілактика</span>
-                                <input type="text" id="v-vp" class="dgc vaccine input"
-                                       placeholder="напр. SARS-CoV-2 mRNA vaccine" readonly>
+                                <span class="label">Вакцинація або профілактика (в ЕСОЗ - код вакцини)</span>
+                                <textarea  type="text" id="v-vp" class="dgc vaccine input" 
+                                       placeholder="напр. SARS-CoV-2 mRNA vaccine" readonly></textarea>
                             </div>
                             <div class="field">
                                 <span class="label">Вакцинний лікарський засіб</span>
@@ -733,53 +738,66 @@
 
 
 <script>
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('service-worker.js', {scope: './'})
-            .then(registration => {
-                console.log('Registration successful, scope is:', registration.scope);
 
-                function listenForWaitingServiceWorker(reg, callback) {
-                    function awaitStateChange() {
-                        reg.installing.addEventListener('statechange', function () {
-                            if (this.state === 'installed') callback(reg);
-                        });
-                    }
-
-                    if (reg.waiting) return callback(reg);
-                    if (reg.installing) awaitStateChange();
-                    reg.addEventListener('updatefound', awaitStateChange);
-                }
-
-                listenForWaitingServiceWorker(registration, () => {
-                    //console.info("Service worker updated!");
-                    if (navigator.serviceWorker.controller) {
-                        // A previous service worker version was already installed
-                        document.getElementById("update-notification").classList.remove("is-hidden");
-                        document.getElementById("app-update-btn").addEventListener("click", event => {
-                            event.preventDefault();
-                            registration.waiting.postMessage('SKIP_WAITING');
-                            window.location.reload();
-                        })
-                    } else {
-                        // First service worker installation
-                        document.getElementById("offline-ready-notification").classList.remove("is-hidden");
-                    }
-                })
-
-                // refresh every opened tab/window when the user hits the reload button
-                let refreshing = false;
-                navigator.serviceWorker.addEventListener('controllerchange', () => {
-                    window.location.reload()
-                    if (!refreshing) {
-                        refreshing = true
-                    }
-                })
-
-            })
-            .catch(error => {
-                console.log('Помилка реєстрації Service Worker, помилка:', error);
-            });
+window.addEventListener('load', async () => {
+  if ('serviceWorker' in navigator) {
+    try {
+      const reg = await navigator.serviceWorker.register('/service-worker.js', {scope: './'})
+      console.log('Service worker register success', reg)
+    } catch (e) {
+      console.log('Service worker register fail')
     }
+  }
+
+//   await loadPosts()
+})
+    // if ('serviceWorker' in navigator) {
+    //     navigator.serviceWorker.register('service-worker.js', {scope: './'})
+    //         .then(registration => {
+    //             console.log('Registration successful, scope is:', registration.scope);
+
+    //             function listenForWaitingServiceWorker(reg, callback) {
+    //                 function awaitStateChange() {
+    //                     reg.installing.addEventListener('statechange', function () {
+    //                         if (this.state === 'installed') callback(reg);
+    //                     });
+    //                 }
+
+    //                 if (reg.waiting) return callback(reg);
+    //                 if (reg.installing) awaitStateChange();
+    //                 reg.addEventListener('updatefound', awaitStateChange);
+    //             }
+
+    //             listenForWaitingServiceWorker(registration, () => {
+    //                 //console.info("Service worker updated!");
+    //                 if (navigator.serviceWorker.controller) {
+    //                     // A previous service worker version was already installed
+    //                     document.getElementById("update-notification").classList.remove("is-hidden");
+    //                     document.getElementById("app-update-btn").addEventListener("click", event => {
+    //                         event.preventDefault();
+    //                         registration.waiting.postMessage('SKIP_WAITING');
+    //                         window.location.reload();
+    //                     })
+    //                 } else {
+    //                     // First service worker installation
+    //                     document.getElementById("offline-ready-notification").classList.remove("is-hidden");
+    //                 }
+    //             })
+
+    //             // refresh every opened tab/window when the user hits the reload button
+    //             let refreshing = false;
+    //             navigator.serviceWorker.addEventListener('controllerchange', () => {
+    //                 window.location.reload()
+    //                 if (!refreshing) {
+    //                     refreshing = true
+    //                 }
+    //             })
+
+    //         })
+    //         .catch(error => {
+    //             console.log('Помилка реєстрації Service Worker, помилка:', error);
+    //         });
+    // }
 </script>
 <script>
     

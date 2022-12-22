@@ -158,6 +158,11 @@ ol {
     top: 7px !important;
 }
 .warning{
+    display: flex;
+    align-items: baseline;
     background-color: #feecf0 !important;
     color: #cc0f35 !important;
+}
+.success{
+    display: flex;
 }

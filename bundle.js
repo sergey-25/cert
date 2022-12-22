@@ -72526,7 +72526,7 @@ Call removeLoopDetectors before resuming.`)
       },
       "vaccine-prophilaxis": {
         abbr: "vp",
-        path: "../vs/sct-vaccines-covid-19.json",
+        path: "../sct-vaccines-covid-19.json",
         json: null
       }
     };
@@ -72618,7 +72618,7 @@ Call removeLoopDetectors before resuming.`)
       document.getElementById("test-group").hidden = true;
       document.getElementById("hide-btn-text").hidden = true;
         document.getElementById("format-text").hidden = true;
-        document.getElementById("is-authentic-text").hidden = true;
+        document.getElementById("is-authentic-text").classList.add("is-hidden");
         document.getElementById("show-btn-text").hidden = true;
       signatureDetails.hidden = false;
       document.getElementById("cert-co").innerText = "unavailable";
@@ -72720,17 +72720,18 @@ Call removeLoopDetectors before resuming.`)
 
         
     function showErrorMessage(err) {
-      var error_title = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "Помилка";
+      var error_title = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : " ";
       var error_text = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
       var display_in_raw_field = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
       console.warn("NOT A DGC: " + err); // Show error message
+     
 
       var message = error_text ? error_text : err;
       if (display_in_raw_field) document.querySelector("#dgc-json").textContent = error_title + "\n" + message;
       document.querySelector("#error-title").textContent = error_title;
       document.querySelector("#error-text").textContent = message;
       const span = document.querySelector("#error-text");
-span.innerHTML = URLify(span.innerText);
+      span.innerHTML = URLify(span.innerText);
       document.querySelector("#error-bar").hidden = false;
       document.querySelector("#progress").classList.add("is-hidden");
         document.getElementById("show-btn-text").hidden = false;
@@ -72822,26 +72823,10 @@ span.innerHTML = URLify(span.innerText);
     } // Display raw certificate values
 
 
-    function displayRawText(text, dgc,) {
-     document.querySelector("#dgc-raw").textContent = text; 
+    function displayRawText(text, dgc) {
       
-    // console.log('sfsdfdsf:', inputText)
-    // if(inputText === dgc.encodedText){
-    //   document.querySelector("#dgc-raw").textContent = ''; 
-    //   console.log('sfsdfdsf:')
-    // }
-    
+         document.querySelector("#dgc-raw").textContent = text; 
 
-      // if(text.toString() === dgc.encodedText.toString()){
-      //   document.querySelector("#dgc-raw").textContent = '';
-      // }
-      // if(text !== dgc.encodedText){
-      //   document.querySelector("#dgc-raw").textContent = text; 
-      // }
-
-  // console.log(dgc.encodedText)
-
-  //       document.querySelector("#dgc-raw").textContent = text;  
     }
 
     function displayRawHCERT(json) {
@@ -72861,6 +72846,7 @@ span.innerHTML = URLify(span.innerText);
           document.getElementById("signature-invalid-notification").hidden = false;
             document.getElementById("show-btn-text").hidden = false;
             document.getElementById("format-text").hidden = false;
+            document.getElementById("is-authentic-text").classList.add("is-hidden");
           break;
 
         case true:
@@ -73133,7 +73119,7 @@ span.innerHTML = URLify(span.innerText);
 
     dataUrl = await blobToDataUrl(imgData[1]);
     window["dataurl"] = dataUrl;
-    console.log(dataUrl);
+    // console.log(dataUrl);
 
     return dataUrl;
   }
@@ -73165,7 +73151,13 @@ span.innerHTML = URLify(span.innerText);
     event.target.value = null;
   }); // Load the image as a dataurl to get the correct image size.
   // The ImageData constructor requires width and height
-
+  document.querySelector("#upload-btn").addEventListener('click', function (event) {
+    
+    document.querySelector("#dgc-raw").textContent = ''; 
+    document.getElementById("alg-human-not-readable").innerHTML = ''; 
+    document.getElementById("kid-human-not-readable").innerHTML = ''; 
+    document.getElementById("cert-human-not-readable").innerHTML = ''; 
+  });
   document.querySelector("#file-selector").addEventListener('change', function (event) {
     reader.readAsDataURL(event.target.files[0]);
   }); // event fired when file reading failed
@@ -73185,7 +73177,7 @@ span.innerHTML = URLify(span.innerText);
               file = event.target.result;
               // var fileURL = windows.URL.createObjectURL(file);
               console.log("Обробка зображення");
-              console.log(file);
+              // console.log(file);
               if (file.substr(0, 21) == "data:application/pdf;") {
 
                 var pdfAsDataUri = file; // shortened
@@ -73203,7 +73195,7 @@ span.innerHTML = URLify(span.innerText);
                 }
                 ).then(fileNew => {
                   (0, _source.loadDGCFromFile)(file)["catch"](function (err) {
-                    UI.showErrorMessage( "Не вдається розпізнати QR-код у завантаженому файлі. Зображення QR-коду недостатньої для розпізнавання якості або QR-код в документі відсутній. Спробуйте завантажити якісніше зображення QR-коду, будь-ласка. Якщо завантажуєте багатосторінковий файл pdf, то QR-код має в ньому бути на першій сторінці.");
+                    UI.showErrorMessage( err, "" , "Не вдається розпізнати QR-код у завантаженому файлі. Зображення QR-коду недостатньої для розпізнавання якості або QR-код в документі відсутній. Спробуйте завантажити якісніше зображення QR-коду, будь-ласка. Якщо завантажуєте багатосторінковий файл pdf, то QR-код має в ньому бути на першій сторінці.");
                   });
                 }
                 );
@@ -73286,7 +73278,7 @@ span.innerHTML = URLify(span.innerText);
 
     UI.scanner.hidden = true; // Decode the DGC and display its content
 
-    console.log(rawstring);
+    // console.log(rawstring);
     (0, _source.loadDGCFromString)(rawstring)["catch"](function (err) {
       UI.showErrorMessage(err, "Це не цифровий COVID-сертифікат ЄС");
       UI.hideQRCanvas();
@@ -73736,7 +73728,7 @@ setTimeout(refresh, 10000);
 
             case 6:
               dgc = new _DGC.EUGreenCertificate(rawstring);
-              console.log(dgc);
+              // console.log(dgc);
 
               rawdgc = dgc.getRawCwt();
               kid = dgc.getKid();
@@ -73752,7 +73744,13 @@ setTimeout(refresh, 10000);
                 //console.log(dgc.getMp.mp); 
               } catch (err) {
                   UI.hideVerifiedNotification(err)
-                UI.showErrorMessage(err, "Недійсний формат сертифіката", "Зчитаний файл є COVID-сертифікатом, але підтверджує не вакцинацію.");
+                  if(err){
+                    document.getElementById("is-authentic-text").hidden = true;
+                  }else{
+                    document.getElementById("is-authentic-text").hidden = false;
+                  }
+                  
+                UI.showErrorMessage(err, "", "Зчитаний документ є COVID-сертифікатом, але підтверджує одужання або результат тестування. Відсутня підстава для внесення даних про вакцинацію до Електронної системи охорони здоров'я України.");
               } // Signature Verification!
 
 
@@ -73804,8 +73802,8 @@ setTimeout(refresh, 10000);
                 break;
               }
               UI.hideQRCanvas();
-              UI.showErrorMessage(Error("Будь-ласка, завантажте файл в форматі jpg, png, або pdf розміром до 5 Мб"),
-                  "Завантажений файл непідтримуваного формату.\n");
+              UI.showErrorMessage(("Завантажений файл непідтримуваного формату. Будь-ласка, завантажте файл в форматі jpg, png, або pdf розміром до 5 Мб"),
+                  "");
               return _context2.abrupt("return");
 
             case 4:
@@ -73818,8 +73816,19 @@ setTimeout(refresh, 10000);
               //console.log(rawstring)
           
               loadDGCFromString(rawstring)["catch"](function (err) {
-              
-                UI.showErrorMessage( `Зчитувач розпізнає тільки документ COVID-сертифікат у форматі EU DCC. Зчитування виявило, що завантажений документ в іншому форма. Дійте відповідно до Наказу МОЗ № 234 від 04.02.22 року. (посилання https://zakon.rada.gov.ua/laws/show/z0187-22#Text) та інструкції (посилання https://docs.google.com/document/d/1935m-pWco0nRFAAQjT6dEKl6n2Mr7AqChDd2ZY2B0jE/edit )`);
+                
+                let text = "Наказу МОЗ № 234 від 04.02.22 року.";
+                let result = text.link("https://zakon.rada.gov.ua/laws/show/z0187-22#Text");
+                result = "<a href='https://zakon.rada.gov.ua/laws/show/z0187-22#Text'>" + text + "</a>";
+                
+                let text1 = "Та інструкції";
+                let result1 = text.link("https://docs.google.com/document/d/1935m-pWco0nRFAAQjT6dEKl6n2Mr7AqChDd2ZY2B0jE/edit");
+                result1 = "<a href='https://docs.google.com/document/d/1935m-pWco0nRFAAQjT6dEKl6n2Mr7AqChDd2ZY2B0jE/edit'>" + text1 + "</a>";
+
+                UI.showErrorMessage( `Зчитувач розпізнає тільки документ COVID-сертифікат у форматі EU DCC. Зчитування виявило, що завантажений документ в іншому форма.
+                Дійте відповідно до ${ document.getElementById("error-text").innerHTML = result}  ${
+                  document.getElementById("error-text").innerHTML = result1 
+                }`, '');
                 // UI.showDecodedText(rawstring);
               });
               _context2.next = 15;
