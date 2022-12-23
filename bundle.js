@@ -72711,7 +72711,7 @@ Call removeLoopDetectors before resuming.`)
       const urls = string.match(/((((ftp|https?):\/\/)|(w{3}\.))[\-\w@:%_\+.~#?,&\/\/=]+)/g);
       if (urls) {
         urls.forEach(function (url) {
-          string = string.replace(url, '<a target="_blank" href="' + url + '">' + url + "</a>");
+          string = string.replace(url, '<a target="_blank" href="' + url + '">' + 'Наказу МОЗ № 234 від 04.02.22 року.' + "</a>");
         });
       }
       return string.replace("(", "<br/>(");
@@ -72724,13 +72724,22 @@ Call removeLoopDetectors before resuming.`)
       var error_text = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
       var display_in_raw_field = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
       console.warn("NOT A DGC: " + err); // Show error message
-     
-
-      var message = error_text ? error_text : err;
+     var message = error_text ? error_text : err;
+     const errMessage = message.toString()
+     const removeWord = message.toString().includes('Error')
+    
+  
       if (display_in_raw_field) document.querySelector("#dgc-json").textContent = error_title + "\n" + message;
       document.querySelector("#error-title").textContent = error_title;
-      document.querySelector("#error-text").textContent = message;
+      if(removeWord){
+        let result = errMessage.substr(errMessage.indexOf(" ") + 1);
+        document.querySelector("#error-text").textContent = result;
+        }else{
+          document.querySelector("#error-text").textContent = message;
+        }
+    
       const span = document.querySelector("#error-text");
+
       span.innerHTML = URLify(span.innerText);
       document.querySelector("#error-bar").hidden = false;
       document.querySelector("#progress").classList.add("is-hidden");
@@ -73139,9 +73148,20 @@ Call removeLoopDetectors before resuming.`)
     var fileList = event.dataTransfer.files;
     reader.readAsDataURL(fileList[0]);
   });
-
-
-
+  
+  /// COPY TO CLIPBOARD ///
+  // let copyText = document.querySelector('.input-box');
+  //    copyText.querySelector('.clone-btn').addEventListener('click', function(){
+  //   let input = copyText.querySelector('.custom')
+  //   input.select();
+  //   document.execCommand('copy')
+  //   copyText.classList.add('active');
+  //   window.getSelection().removeAllRanges();
+  //   setTimeout(function(){
+  //     copyText.classList.remove('active')
+  //   }, 1500)
+  // })
+ 
 
   /* FILE SELECTOR */
 
@@ -73154,6 +73174,7 @@ Call removeLoopDetectors before resuming.`)
   document.querySelector("#upload-btn").addEventListener('click', function (event) {
     
     document.querySelector("#dgc-raw").textContent = ''; 
+    document.getElementById("dgc-json").innerText = " ";
     document.getElementById("alg-human-not-readable").innerHTML = ''; 
     document.getElementById("kid-human-not-readable").innerHTML = ''; 
     document.getElementById("cert-human-not-readable").innerHTML = ''; 
@@ -73816,19 +73837,13 @@ setTimeout(refresh, 10000);
               //console.log(rawstring)
           
               loadDGCFromString(rawstring)["catch"](function (err) {
-                
-                let text = "Наказу МОЗ № 234 від 04.02.22 року.";
-                let result = text.link("https://zakon.rada.gov.ua/laws/show/z0187-22#Text");
-                result = "<a href='https://zakon.rada.gov.ua/laws/show/z0187-22#Text'>" + text + "</a>";
-                
-                let text1 = "Та інструкції";
-                let result1 = text.link("https://docs.google.com/document/d/1935m-pWco0nRFAAQjT6dEKl6n2Mr7AqChDd2ZY2B0jE/edit");
-                result1 = "<a href='https://docs.google.com/document/d/1935m-pWco0nRFAAQjT6dEKl6n2Mr7AqChDd2ZY2B0jE/edit'>" + text1 + "</a>";
+            
+         let link = "https://zakon.rada.gov.ua/laws/show/z0187-22#Text"  ;
+           UI.showErrorMessage( `Зчитувач розпізнає тільки документ COVID-сертифікат у форматі EU DCC.
 
-                UI.showErrorMessage( `Зчитувач розпізнає тільки документ COVID-сертифікат у форматі EU DCC. Зчитування виявило, що завантажений документ в іншому форма.
-                Дійте відповідно до ${ document.getElementById("error-text").innerHTML = result}  ${
-                  document.getElementById("error-text").innerHTML = result1 
-                }`, '');
+           Завантажений файл не містить документу про вакцинацію в форматі EU DCC. 
+           
+                Дійте відповідно до ${ document.getElementById("error-text").innerHTML = link} `, '');
                 // UI.showDecodedText(rawstring);
               });
               _context2.next = 15;

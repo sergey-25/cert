@@ -166,3 +166,43 @@ ol {
 .success{
     display: flex;
 }
+.input-box{
+    display: flex;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+}
+.clone-btn{
+    position: relative;
+    border:0;
+
+}
+input{
+    overflow-y: auto;
+    overflow-x: auto;
+}
+.input-box .custom{
+    border: none;
+    padding-top: 0;
+    padding-bottom: 0;
+    outline: none;
+   
+}
+.input-box .clone-btn{
+    padding: 10px;
+    background-color: #00d1b2;
+    color: #fff;
+    font-size: 14px;
+    outline: none;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+.input-box .clone-btn:active{
+    background-color: #fff;
+}
+textarea {
+    height: 30px;
+    resize: none;
+}
+.textarea-input{
+   padding-top: 7px !important;
+}

@@ -22,9 +22,9 @@
     <link rel="manifest" href="manifest.webmanifest">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<meta http-equiv='cache-control' content='no-cache'>
+<!-- <meta http-equiv='cache-control' content='no-cache'>
 <meta http-equiv='expires' content='0'>
-<meta http-equiv='pragma' content='no-cache'>
+<meta http-equiv='pragma' content='no-cache'> -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Digital COVID Certificate Decoder">
@@ -45,6 +45,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/solid.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/brands.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+   
     <link
   rel="stylesheet"
   href="https://unpkg.com/tippy.js@6/animations/scale.css"
@@ -60,7 +61,7 @@
           rel="stylesheet">
     <script src="bundle.js" defer></script>
     <script src="//mozilla.github.io/pdf.js/build/pdf.js"></script>
-
+   
     <title>Зчитувач цифрових документів про вакцинацію </title>
     <style>
         body {
@@ -420,8 +421,13 @@
                         <div id="vaccination-group" class="mt-6" hidden>
                             <div class="field">
                                 <span class="label">Унікальний номер сертифіката (UVCI) </span>
-                                <input type="text" id="v-ci" class="dgc input"
-                                       placeholder="e.g 01ITE7300E1AB2A84C719004F103DCB1F70A#6" readonly>
+                              <div class="input-box">
+                                <textarea type="text" id="v-ci" class="dgc input custom textarea-input"
+                                placeholder="e.g 01ITE7300E1AB2A84C719004F103DCB1F70A#6" readonly></textarea>
+                                <button id="clone-btn1"  class="clone-btn" onclick="copy('v-ci')">
+                                    <i class="fa fa-clone"></i>
+                                </button>
+                              </div>
                             </div>
                             <div class="columns is-mobile is-gapless is-vcentered is-align-items-end">
                                 <div class="column">
@@ -448,44 +454,81 @@
                                 </div>
                             </div>
                             <div class="field">
-                                <span class="label">Дата щеплення</span>
-                                <input type="text" id="v-dt" class="dgc vaccine input"
+                                <span class="label">Дата вакцинації</span>
+                               <div class="input-box">
+                                <input type="text" id="v-dt" class="dgc vaccine input custom"
                                        placeholder="напр. 2021-05-18" readonly>
+                                       <button id="clone-btn2"  class="clone-btn" onclick="copy('v-dt')">
+                                        <i class="fa fa-clone"></i>
+                                    </button>
+                               </div>
                             </div>
+                         
                             <div class="field">
                                 <span class="label">Вакцинація або профілактика (в ЕСОЗ - код вакцини)</span>
-                                <textarea  type="text" id="v-vp" class="dgc vaccine input" 
-                                       placeholder="напр. SARS-CoV-2 mRNA vaccine" readonly></textarea>
+                               <div class="input-box" id="input-v-vp">
+                                <textarea  type="text" id="v-vp" class="dgc vaccine input custom textarea-input" 
+                                placeholder="напр. SARS-CoV-2 mRNA vaccine" readonly></textarea>
+                                <button id="clone-btn3"  class="clone-btn" onclick="copy('v-vp')">
+                                    <i class="fa fa-clone"></i>
+                                </button>
+                               </div>
                             </div>
                             <div class="field">
                                 <span class="label">Вакцинний лікарський засіб</span>
-                                <input type="text" id="v-mp" class="dgc vaccine input" placeholder="напр. Comirnaty"
+                                <div class="input-box">
+                                    <input type="text" id="v-mp" class="dgc vaccine input custom" placeholder="напр. Comirnaty"
                                        readonly>
+                                       <button id="clone-btn4"  class="clone-btn" onclick="copy('v-mp')">
+                                        <i class="fa fa-clone"></i>
+                                    </button>
+                                </div>
                             </div>
                             <div class="field">
-                                <span class="label">Код вакцини</span>
-                                <input type="text" id="v-mpr" class="dgc vaccine input" placeholder="напр. F091123"
-                                       readonly>
+                                <span class="label">Кодування вакцини (в ЕСОЗ - серія вакцини)</span>
+                             <div class="input-box">
+                                <input type="text" id="v-mpr" class="dgc vaccine input custom" placeholder="напр. F091123"
+                                readonly>
+                                <button id="clone-btn5"  class="clone-btn" onclick="copy('v-mpr')">
+                                    <i class="fa fa-clone"></i>
+                                </button>
+                             </div>
                             </div>
                             <div class="field">
                                 <span class="label">Виробник вакцини або власник торгового посвідчення</span>
-                                <input type="text" id="v-ma" class="dgc vaccine input"
-                                       placeholder="напр. Biontech Manufacturing GmbH" readonly>
+                               <div class="input-box">
+                                <input type="text" id="v-ma" class="dgc vaccine input custom"
+                                placeholder="напр. Biontech Manufacturing GmbH" readonly>
+                                <button id="clone-btn6"  class="clone-btn" onclick="copy('v-ma')">
+                                    <i class="fa fa-clone"></i>
+                                </button>
+                               </div>
                             </div>
                             <div class="field">
                                 <span class="label">Націлена на хворобу або збудника</span>
-                                <input type="text" id="v-tg" class="dgc vaccine input" placeholder="напр. COVID-19"
-                                       readonly>
+                               <div class="input-box">
+                                <input type="text" id="v-tg" class="dgc vaccine input custom" placeholder="напр. COVID-19"
+                                readonly>
+                                <button id="clone-btn7"  class="clone-btn" onclick="copy('v-tg')">
+                                    <i class="fa fa-clone"></i>
+                                </button>
+                               </div>
                             </div>
                             <div class="field">
                                 <span class="label">Країна, у якій зроблено вакцинацію</span>
-                                <input type="text" id="v-co" class="dgc vaccine input" placeholder="напр. Italy"
-                                       readonly>
+                             <div class="input-box">
+                                <input type="text" id="v-co" class="dgc vaccine input custom" placeholder="напр. Italy"
+                                readonly>
+                                <button id="clone-btn8"  class="clone-btn" onclick="copy('v-co')">
+                                    <i class="fa fa-clone"></i>
+                                </button>
+                             </div>
                             </div>
                             <div class="field">
-                                <span class="label"> Емітент сертифіката</span>
+                                <span class="label"> Документ підписано організацією</span>
                                 <input type="text" id="v-is" class="dgc vaccine input" placeholder="напр. МОЗ"
                                        readonly>
+                                       
                             </div>
 
                             <div class="field">
@@ -800,6 +843,64 @@ window.addEventListener('load', async () => {
     // }
 </script>
 <script>
+
+let copy = (textId) => {
+  //Selects the text in the <input> elemet
+   document.getElementById(textId).select()
+
+  if(textId === 'v-ci'){
+    document.querySelector('#clone-btn1').innerHTML="<i class='fa fa-check'></i>"
+    setTimeout(function(){
+        document.querySelector('#clone-btn1').innerHTML="<i class='fa fa-clone'></i>"
+    }, 1000)
+}
+if(textId === 'v-dt'){
+    document.querySelector('#clone-btn2').innerHTML="<i class='fa fa-check'></i>"
+    setTimeout(function(){
+        document.querySelector('#clone-btn2').innerHTML="<i class='fa fa-clone'></i>"
+    }, 1000)
+}
+if(textId === 'v-vp'){
+    document.querySelector('#clone-btn3').innerHTML="<i class='fa fa-check'></i>"
+    setTimeout(function(){
+        document.querySelector('#clone-btn3').innerHTML="<i class='fa fa-clone'></i>"
+    }, 1000)
+}
+if(textId === 'v-mp'){
+    document.querySelector('#clone-btn4').innerHTML="<i class='fa fa-check'></i>"
+    setTimeout(function(){
+        document.querySelector('#clone-btn4').innerHTML="<i class='fa fa-clone'></i>"
+    }, 1000)
+}
+if(textId === 'v-mpr'){
+    document.querySelector('#clone-btn5').innerHTML="<i class='fa fa-check'></i>"
+    setTimeout(function(){
+        document.querySelector('#clone-btn5').innerHTML="<i class='fa fa-clone'></i>"
+    }, 1000)
+}
+if(textId === 'v-ma'){
+    document.querySelector('#clone-btn6').innerHTML="<i class='fa fa-check'></i>"
+    setTimeout(function(){
+        document.querySelector('#clone-btn6').innerHTML="<i class='fa fa-clone'></i>"
+    }, 1000)
+}
+if(textId === 'v-tg'){
+    document.querySelector('#clone-btn7').innerHTML="<i class='fa fa-check'></i>"
+    setTimeout(function(){
+        document.querySelector('#clone-btn7').innerHTML="<i class='fa fa-clone'></i>"
+    }, 1000)
+}
+if(textId === 'v-co'){
+    document.querySelector('#clone-btn8').innerHTML="<i class='fa fa-check'></i>"
+    setTimeout(function(){
+        document.querySelector('#clone-btn8').innerHTML="<i class='fa fa-clone'></i>"
+    }, 1000)
+}
+  //Copies the selected text to clipboard
+  document.execCommand("copy");
+  window.getSelection().removeAllRanges();
+};
+
     
 
  tippy('#myButton', {
