@@ -72856,6 +72856,9 @@ Call removeLoopDetectors before resuming.`)
             document.getElementById("show-btn-text").hidden = false;
             document.getElementById("format-text").hidden = false;
             document.getElementById("is-authentic-text").classList.add("is-hidden");
+            document.getElementById("cert-info-group").classList.add("is-hidden");
+            document.getElementById("person-group").classList.add("is-hidden");
+            document.getElementById("vaccination-group").classList.add("is-hidden");
           break;
 
         case true:
@@ -72863,6 +72866,9 @@ Call removeLoopDetectors before resuming.`)
             document.getElementById("hide-btn-text").hidden = false;
             document.getElementById("is-authentic-text").hidden = false;
             document.getElementById("format-text").hidden = true;
+            document.getElementById("cert-info-group").classList.remove("is-hidden");
+            document.getElementById("person-group").classList.remove("is-hidden");
+            document.getElementById("vaccination-group").classList.remove("is-hidden");
           break;
 
         default:
@@ -73149,19 +73155,7 @@ Call removeLoopDetectors before resuming.`)
     reader.readAsDataURL(fileList[0]);
   });
   
-  /// COPY TO CLIPBOARD ///
-  // let copyText = document.querySelector('.input-box');
-  //    copyText.querySelector('.clone-btn').addEventListener('click', function(){
-  //   let input = copyText.querySelector('.custom')
-  //   input.select();
-  //   document.execCommand('copy')
-  //   copyText.classList.add('active');
-  //   window.getSelection().removeAllRanges();
-  //   setTimeout(function(){
-  //     copyText.classList.remove('active')
-  //   }, 1500)
-  // })
- 
+  
 
   /* FILE SELECTOR */
 
@@ -73396,7 +73390,7 @@ Call removeLoopDetectors before resuming.`)
 
             case 27:
               throw Error(
-                "Не вдається розпізнати QR-код у завантаженому файлі. Зображення QR-коду недостатньої для розпізнавання якості або QR-код в документі відсутнійСпробуйте завантажити якісніше зображення QR-коду, будь-ласка. Якщо завантажуєте багатосторінковий файл pdf, то QR-код має в ньому бути на першій сторінці"
+                "Не вдається розпізнати QR-код у завантаженому файлі. Зображення QR-коду недостатньої для розпізнавання якості або QR-код в документі відсутній. Спробуйте завантажити якісніше зображення QR-коду, будь-ласка. Якщо завантажуєте багатосторінковий файл pdf, то QR-код має в ньому бути на першій сторінці"
             );
 
 
