@@ -25,8 +25,8 @@ const filesToCache = [
     "qr-scanner-worker.min.js.map",
   ];
   
-const staticCacheName = `app-cache-v9`;
-const dynamicCacheName = 'd-app-v9'
+const staticCacheName = `app-cache-v11`;
+const dynamicCacheName = 'd-app-v11'
   
 
 self.addEventListener('install', async event => {

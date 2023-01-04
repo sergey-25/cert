@@ -206,3 +206,6 @@ textarea {
 .textarea-input{
    padding-top: 7px !important;
 }
+.notif{
+  display: flex ;
+}

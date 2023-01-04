@@ -72077,6 +72077,7 @@ Call removeLoopDetectors before resuming.`)
 
     function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
+  
     var EUGreenCertificate = /*#__PURE__*/function (kid) {
 
       function EUGreenCertificate(greenpassStr) {
@@ -72745,6 +72746,7 @@ Call removeLoopDetectors before resuming.`)
       document.querySelector("#progress").classList.add("is-hidden");
         document.getElementById("show-btn-text").hidden = false;
         document.getElementById("signature-verified-notification").hidden = true;
+        document.getElementById("signature-verified-notification-hide").hidden = true;
     }
 
     function showDecodedText(text) {
@@ -72792,6 +72794,10 @@ Call removeLoopDetectors before resuming.`)
     // Fills the UI with human readable values 
     // of the dgc fields
     //
+    const dontShowCert = (strCert)=>{
+  
+      console.log('')
+    }
 
 
     function displayDecodedHCERT(greenpassJSON) {
@@ -72806,8 +72812,20 @@ Call removeLoopDetectors before resuming.`)
         type = "t";
       } else throw Error("Недійсний тип сертифіката");
 
-      showDecodedHCertGroup(type); // Fill the UI
-      // Display the top-level properties(dob, ver)
+
+
+  const strCert = greenpassJSON.v[0].ci.value
+  const regex = /UVCI.*\d\d.*UA/i;
+  const reg = strCert.match(regex);
+
+  if(!reg){
+     showDecodedHCertGroup(type); // Fill the UI
+        // Display the top-level properties(dob, ver)
+  }else{
+    dontShowCert(strCert)
+  }
+      
+     
 
       document.getElementById("dob").value = greenpassJSON.dob.value;
       document.getElementById("ver").innerText = greenpassJSON.ver.value; // Display the person's name group properties
@@ -72842,9 +72860,12 @@ Call removeLoopDetectors before resuming.`)
       document.querySelector("#dgc-json").textContent = json;
     }
 
-    function displaySignatureCheckResult(isAuthentic) {
+    function displaySignatureCheckResult(isAuthentic, hrDGC) {
       document.getElementById("progress").classList.add("is-hidden");
-
+      const numberCert = hrDGC.v[0].ci.value;
+      const regex = /UVCI.*\d\d.*UA/i;
+      const reg = numberCert.match(regex);
+    
       switch (isAuthentic) {
         case null:
             document.getElementById("hide-btn-text").hidden = false;
@@ -72852,6 +72873,7 @@ Call removeLoopDetectors before resuming.`)
           break;
 
         case false:
+          document.getElementById("signature-verified-notification-hide").hidden = true;
           document.getElementById("signature-invalid-notification").hidden = false;
             document.getElementById("show-btn-text").hidden = false;
             document.getElementById("format-text").hidden = false;
@@ -72862,7 +72884,13 @@ Call removeLoopDetectors before resuming.`)
           break;
 
         case true:
-          document.getElementById("signature-verified-notification").hidden = false;
+          if(!reg){
+            document.getElementById("signature-verified-notification").hidden = false;
+            document.getElementById("signature-verified-notification-hide").hidden = true;
+          }else if(reg) {
+             document.getElementById("signature-verified-notification").hidden = true;
+             document.getElementById("signature-verified-notification-hide").hidden = false;
+          }
             document.getElementById("hide-btn-text").hidden = false;
             document.getElementById("is-authentic-text").hidden = false;
             document.getElementById("format-text").hidden = true;
@@ -73362,7 +73390,7 @@ Call removeLoopDetectors before resuming.`)
               }();
 
               //fallback to the old qr decoder procedure if QrScanner fails
-              console.info("QrScanner detection failed, falling back to jsqr");
+              // console.info("QrScanner detection failed, falling back to jsqr");
               _context2.next = 14;
               return createImage(imageDataUrl);
 
@@ -73380,7 +73408,7 @@ Call removeLoopDetectors before resuming.`)
             case 21:
               imgdata = _context2.sent;
               decoded = (0, _jsqr["default"])(imgdata.data, imgdata.width, imgdata.height);
-
+// console.log(decoded)
               if (!decoded) {
                 _context2.next = 27;
                 break;
@@ -73751,10 +73779,11 @@ setTimeout(refresh, 10000);
               // raw content
 
               UI.displayRawText(dgc.getEncodedString(), dgc);
-              UI.displayRawHCERT(dgc.toRawString()); // parsed content
+          UI.displayRawHCERT(dgc.toRawString()); // parsed content
 
               try {
                 hrDGC = dgc.withDecodedValues();
+              
                 UI.displayDecodedHCERT(hrDGC);
                 //console.log(dgc.getMp.mp); 
               } catch (err) {
@@ -73771,7 +73800,7 @@ setTimeout(refresh, 10000);
 
               UI.setProgressText("Виконую перевірку підпису");
               signature.verify(rawdgc, kid).then(function (isAuthentic) {
-                UI.displaySignatureCheckResult(isAuthentic);
+                UI.displaySignatureCheckResult(isAuthentic, hrDGC);
               })["catch"](function (err) {
                 UI.setProgressText("Не вдалося завантажити список сертифікатів підписувача.\n Перевірте інтернет з'єднання\n");
                 window.setTimeout(function () {
